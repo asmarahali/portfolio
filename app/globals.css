@@ -1,26 +1,107 @@
 @import "tailwindcss";
 
+/* ===========================================================
+   Vintage Pink — design tokens
+   Warm, muted, paper-like palette pulled from the CV header.
+   =========================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fbf1ea;        /* warm cream background           */
+  --paper-deep: #f3e1d6;   /* slightly deeper panel cream     */
+  --rose: #d99a8b;         /* dusty salmon (CV header bars)   */
+  --rose-deep: #c47b6a;    /* darker rose for hover/accent    */
+  --rose-soft: #ecc4b8;    /* soft blush                      */
+  --ink: #3f2d28;          /* warm espresso text              */
+  --ink-soft: #6b524a;     /* muted brown for body copy       */
+  --gold: #c9a36a;         /* aged-gold detail                */
+  --line: #e3c9bc;         /* hairline / borders              */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-rose: var(--rose);
+  --color-rose-deep: var(--rose-deep);
+  --color-rose-soft: var(--rose-soft);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-poppins);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  /* faint paper grain via layered radial gradients */
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(217, 154, 139, 0.08) 0, transparent 38%),
+    radial-gradient(circle at 82% 8%, rgba(201, 163, 106, 0.07) 0, transparent 32%),
+    radial-gradient(circle at 70% 88%, rgba(217, 154, 139, 0.06) 0, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* selection */
+::selection {
+  background: var(--rose-soft);
+  color: var(--ink);
+}
+
+/* thin vintage scrollbar */
+::-webkit-scrollbar { width: 11px; }
+::-webkit-scrollbar-track { background: var(--paper-deep); }
+::-webkit-scrollbar-thumb {
+  background: var(--rose);
+  border: 3px solid var(--paper-deep);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--rose-deep); }
+
+/* ----- reusable bits ----- */
+.eyebrow {
+  font-family: var(--font-sans), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+}
+
+/* little ornamental divider */
+.ornament {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--gold);
+}
+.ornament::before,
+.ornament::after {
+  content: "";
+  height: 1px;
+  width: 2.5rem;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.ornament::after {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+/* entrance animation */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise {
+  opacity: 0;
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise { animation: none; opacity: 1; }
 }
